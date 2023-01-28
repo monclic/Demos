@@ -1,0 +1,22 @@
+server:
+  port: 11001
+
+spring:
+  application:
+    name: provider-server #两个服务名一致（服务名不能使用下划线）
+
+#eureka配置
+eureka:
+  client:
+    service-url:
+      #方式一：需要注册给Eureka Server的地址，也就是将自己注册给哪一个Eureka Server
+#      defaultZone: http://localhost:13000/eureka
+      #方式二：将自己注册给Eureka Server集群（可以写Eureka服务名，而不必写localhost了）
+      defaultZone: http://eurekaServer13000:13000/eureka,http://eurekaServer13001:13001/eureka
+  instance:
+    #续约时间间隔（默认30秒）表示eureka client发送心跳给server端的频率
+    lease-renewal-interval-in-seconds: 5
+    #使用ip地址向Eureka注册
+    prefer-ip-address: true
+    #上面的配置已经可以使用ip注册了，但显示的还是主机名，所以这里设置显示的注册名
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
